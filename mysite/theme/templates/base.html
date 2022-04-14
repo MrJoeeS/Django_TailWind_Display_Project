@@ -1,0 +1,266 @@
+{% load static tailwind_tags %}
+{% load static %}
+{% load custom_templatetag %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <title>My Django Tailwind Program</title>
+	
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		{% tailwind_css %}
+	</head>
+
+	<body class="bg-gray-50 font-serif leading-normal tracking-normal">
+		<div class="container mx-auto">
+			<section class="flex items-center justify-center">
+				<h1 class="text-5xl">Creating a Django and Tailwind project</h1>		
+			</section>
+		</div>
+	</body>
+	&nbsp;&nbsp;
+	
+	<p style="margin-left: 2.5em;padding: 0 7em 2em 0;border-width: 2px; border-color: black; border-style:solid;">
+		Below are 4 different graphs.<br> 
+		The first two shows data pulled from a database.<br> 
+		The last to graphs shows information that was pulled from a API.</p>
+
+	<section class="flex items-center justify-center"></section>
+		<div>
+			<canvas id="myChart"></canvas>
+	 	</div>
+	  		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	  		<script>
+				const ctx = document.getElementById('myChart');
+				const myChart = new Chart(ctx, {
+					type: 'pie',
+					data: {
+						labels: ['Male', 'Female', 'Other'],
+						datasets: [{
+							label: 'Total number of users is {% total_users %} and {% total_male_users %} are male and {% total_female_users %} are female',
+							data: ['{% total_male_users %}', '{% total_female_users %}', '{% total_other_users %}'],
+							backgroundColor: [
+								'rgba(255, 99, 132, 0.2)',
+								'rgba(54, 162, 235, 0.2)',
+								'rgba(255, 206, 86, 0.2)',
+								'rgba(75, 192, 192, 0.2)',
+								'rgba(153, 102, 255, 0.2)',
+								'rgba(255, 159, 64, 0.2)'
+							],
+							borderColor: [
+								'rgba(255, 99, 132, 1)',
+								'rgba(54, 162, 235, 1)',
+								'rgba(255, 206, 86, 1)',
+								'rgba(75, 192, 192, 1)',
+								'rgba(153, 102, 255, 1)',
+								'rgba(255, 159, 64, 1)'
+							],
+							borderWidth: 1
+        						}]
+   					 	},
+							options: {
+								plugins: {
+									title: {
+										display: true,
+										text: 'Userbase' ,
+										font: {size: 36},
+										padding: {
+                	    				top: 50,
+                    					bottom: 10
+											},
+								scales: {
+									y: {
+										beginAtZero: true
+											}
+										}
+									}
+								}	
+							}
+						});
+	    	</script>
+	</section>
+			
+	<section class="flex items-center justify-center"></section>
+		<div>
+			<canvas id="myChart2"></canvas>
+		</div>
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+			<script>
+			const ctx2 = document.getElementById('myChart2');
+			const myChart2 = new Chart(ctx2, {
+			type: 'bar',
+			data: {
+				labels: ['Male', 'Female', 'Other'],
+				datasets: [{
+					label: 'Total number of users is {% total_users %} and {% total_male_users %} are male and {% total_female_users %} are female',
+					backgroundColor: 'rgb(255, 99, 132)',
+				 	borderColor: 'rgb(255, 99, 132)',
+					data: ['{% total_male_users %}', '{% total_female_users %}', '{% total_other_users %}'],
+
+				}]
+			},
+					options: {
+						plugins: {
+							legend: {
+      							display: false
+    						},
+							title: {
+								display: true,
+								text: 'Same data as above but it is now a bar' ,
+								font: {size: 36},
+										padding: {
+                	    				top: 50,
+                    					bottom: 10
+											},
+									}
+								},
+						scales: {
+							y: {
+								display: true, 
+								title: {
+									display: true, 
+									text: '# of Each'
+									}
+								}
+							},
+						}
+					});
+			</script>
+	</section>
+	&nbsp;&nbsp;
+
+	<div>
+		<p>The graph belows pulls data from an api.</p>
+		<p>The API is http://localhost:8000/datamodel/ .</p>
+		<p>The graph below pulls all the data at the API and creates a line chart.</p>
+
+	</div>
+
+	<section class="flex items-center justify-center"></section>
+		<div>
+			<canvas id="line-chart"></canvas>
+		</div>
+
+			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+			<script>
+				
+			var data = {{data|safe}};
+			var label = {{label|safe}};
+			const ctx3 = document.getElementById('line-chart');
+			const myChart3 = new Chart(ctx3, {
+				type: 'line',
+				data: {
+					labels: label,
+					datasets: [{ 
+						label: "My chart",
+						data: data,
+						fill: false,
+						borderColor: 'rgb(75, 192, 192)',
+						tension: 0.1
+							}]
+						},
+				options: {
+					plugins: {
+						legend: {
+							display: false
+						},
+						title: {
+							display: true,
+							text: 'This data is pulled from an API I created' ,
+							font: {size: 36},
+									padding: {
+									top: 50,
+									bottom: 10
+										},
+								}
+							},
+				scales: {
+					x: {
+						display: true, 
+						title: {
+						display: true,
+						text: 'Index'
+						}
+						},
+					y: {
+						display: true, 
+						title: {
+							display: true, 
+							text: 'Value'
+							}
+						}	
+					},
+				}
+			});
+			</script>
+	</section>
+	&nbsp;&nbsp;
+
+	<div>
+		<p>The graph belows pulls two differnt data sets.</p>
+		<p>The first is a number from the distribution infomation located at http://localhost:8000/datamodel/ .</p>
+		<p>The second pulls the index of the first data set</p>
+		<p2>Then the two data sets combine to assign x as a number and y to the index of that particular model</p2>
+	</div>
+
+
+	<section class="flex items-center justify-center"></section>
+	<div>
+		<canvas id="scatter-chart"></canvas>
+	</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script>
+			
+		var data = {{data|safe}};
+		var label = {{label|safe}};
+
+		const coords = data.map((x, i) => ({ x, y: label[i] }));
+
+		const ctx4 = document.getElementById('scatter-chart');
+		const myChart4 = new Chart(ctx4, {
+			type: 'scatter',
+			data: {
+				label : ["chart"],
+				datasets: [{
+						label: 'Scatter Dataset',
+						data: coords,
+							backgroundColor: 'rgb(255, 99, 132)'
+						}]
+					},
+				options: {
+					plugins: {
+						legend: { display: false },
+							title: {
+								display: true,
+								text: 'This pulls 2 differnt data sets from the API' ,
+								font: {size: 36},
+									padding: {
+									top: 50,
+									bottom: 10
+										},
+									}
+								},
+					scales: {
+						x: {
+							display: true, 
+							title: {
+							display: true,
+							text: 'Value'
+							}
+						},
+						y: {
+							display: true, 
+							title: {
+								display: true, 
+								text: 'Index'
+							}
+						}
+					},			
+				}
+			});
+		</script>
+	</section>
